@@ -1,0 +1,8 @@
+[
+  {"id":"en-benign","input":{"kind":"text","text":"The library closes at five.","processing_consent":true},"valid":true},
+  {"id":"ur-benign","input":{"kind":"text","text":"کتاب کل واپس کریں۔","locale":"ur","country":"PK","processing_consent":true},"valid":true},
+  {"id":"roman-urdu-payment","input":{"kind":"text","text":"Interview se pehle registration fee jama karein.","locale":"ur-Latn","processing_consent":true},"valid":true},
+  {"id":"reserved-host","input":{"kind":"url","url":"https://example.invalid/check","processing_consent":true},"valid":true},
+  {"id":"unsupported-scheme","input":{"kind":"url","url":"file:///sample","processing_consent":true},"valid":false},
+  {"id":"no-consent","input":{"kind":"text","text":"Example","processing_consent":false},"valid":false}
+]

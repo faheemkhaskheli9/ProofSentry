@@ -1,0 +1,115 @@
+{
+  "$defs": {
+    "TextSubmission": {
+      "additionalProperties": false,
+      "properties": {
+        "locale": {
+          "default": "en",
+          "maxLength": 63,
+          "pattern": "^[a-zA-Z]{2,8}(-[a-zA-Z0-9]{1,8})*$",
+          "title": "Locale",
+          "type": "string"
+        },
+        "country": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z]{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Country"
+        },
+        "processing_consent": {
+          "const": true,
+          "title": "Processing Consent",
+          "type": "boolean"
+        },
+        "kind": {
+          "const": "text",
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 20000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "processing_consent",
+        "kind",
+        "text"
+      ],
+      "title": "TextSubmission",
+      "type": "object"
+    },
+    "URLSubmission": {
+      "additionalProperties": false,
+      "properties": {
+        "locale": {
+          "default": "en",
+          "maxLength": 63,
+          "pattern": "^[a-zA-Z]{2,8}(-[a-zA-Z0-9]{1,8})*$",
+          "title": "Locale",
+          "type": "string"
+        },
+        "country": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z]{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Country"
+        },
+        "processing_consent": {
+          "const": true,
+          "title": "Processing Consent",
+          "type": "boolean"
+        },
+        "kind": {
+          "const": "url",
+          "title": "Kind",
+          "type": "string"
+        },
+        "url": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "processing_consent",
+        "kind",
+        "url"
+      ],
+      "title": "URLSubmission",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "text": "#/$defs/TextSubmission",
+      "url": "#/$defs/URLSubmission"
+    },
+    "propertyName": "kind"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/TextSubmission"
+    },
+    {
+      "$ref": "#/$defs/URLSubmission"
+    }
+  ]
+}
