@@ -43,12 +43,15 @@ def require_guest(request: Request) -> tuple[UUID, datetime]:
     raise HTTPException(401, "Guest session required", headers={"Cache-Control": "no-store"})
 
 
-@router.post("/session", response_model=Guest)
-def start_guest(request: Request, response: Response) -> Guest:
+def require_trusted_origin(request: Request) -> None:
     origin = request.headers.get("origin")
     if ((origin is not None and origin != os.environ.get("PUBLIC_ORIGIN"))
             or request.headers.get("sec-fetch-site") == "cross-site"):
         raise HTTPException(403, "Untrusted origin")
+
+
+@router.post("/session", response_model=Guest, dependencies=[Depends(require_trusted_origin)])
+def start_guest(request: Request, response: Response) -> Guest:
     response.headers["Cache-Control"] = "no-store"
     with psycopg.connect(os.environ["DATABASE_URL"]) as conn:
         principal = lookup(conn, digest(request))

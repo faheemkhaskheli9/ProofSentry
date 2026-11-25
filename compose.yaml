@@ -24,6 +24,7 @@ services:
   api:
     environment:
       <<: *database
+      ENABLE_ASSESSMENT_INTAKE: ${ENABLE_ASSESSMENT_INTAKE:-0}
       PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://127.0.0.1:8000}
     depends_on:
       migrate:

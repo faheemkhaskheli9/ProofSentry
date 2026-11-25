@@ -1,6 +1,6 @@
 # Privacy inventory
 
-This scaffold processes synthetic examples locally during tests. The API also issues opaque guest cookies, stores their SHA-256 digests with random principal IDs and 24-hour expiries, and rejects expired credentials. Session issuance prunes expired rows in bounded batches. Proposed retention below follows the TRD and requires approval before collecting submissions. The product owner is responsible for confirming the legal controller, hosting region, subprocessors and deletion evidence before pilot intake.
+This scaffold processes synthetic examples locally during tests. The API also issues opaque guest cookies, stores their SHA-256 digests with random principal IDs and 24-hour expiries, and rejects expired credentials. Session issuance prunes expired rows in bounded batches. Opt-in development intake stores the validated JSON separately from jobs. Session pruning cascades to assessments, private input and job references. Time-driven physical purge and erasure remain pilot gates. Proposed retention below follows the TRD and requires approval before collecting submissions. The product owner is responsible for confirming the legal controller, hosting region, subprocessors and deletion evidence before pilot intake.
 
 | Fields | Purpose / recipient | Proposed retention and deletion |
 |---|---|---|

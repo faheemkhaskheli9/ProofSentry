@@ -12,7 +12,7 @@ ProofSentry helps people recognize suspicious messages, links, QR codes, imperso
 
 ## Status
 
-The local API serves a liveness probe and PostgreSQL-backed guest sessions. Draft text and URL contracts and synthetic intake fixtures are available for development. Assessment processing is planned.
+The local API serves a liveness probe and PostgreSQL-backed guest sessions. Local text and URL intake can persist private assessments and queue detector jobs. Jobs stay queued until the dispatcher and worker land.
 
 The initial MVP is a responsive web application for text, URL and screenshot checks. Advanced audio/video screening, business verification, mobile integrations and community reporting are subsequent phases, subject to evaluation, privacy and security gates.
 
@@ -34,10 +34,12 @@ Read `GET /healthz` on localhost port 8000. For the session API, set a local `PO
 
 For standalone development, set `DATABASE_URL` and run `python -m services.db.migrate` before using sessions. To include database integration tests, install `httpx==0.28.1` and point `TEST_DATABASE_URL` at a disposable PostgreSQL database.
 
+For local synthetic submissions, set `ENABLE_ASSESSMENT_INTAKE=1` before starting the API. With an active guest cookie, send JSON to `POST /v1/assessments` and supply an `Idempotency-Key` header (1–128 letters, digits, dots, underscores or hyphens). A successful request returns HTTP 202 with an assessment ID. Poll `GET /v1/assessments/{assessment_id}` with the same session. Each 24-hour guest session accepts ten distinct assessments. Matching retries reuse the original assessment, and conflicting key reuse returns HTTP 409.
+
 The [draft JSON intake schema](packages/contracts/intake-v1.schema.json) covers text and URL submissions. Runtime validation also checks URL syntax and blank text. Regenerate after model changes with `python -m packages.contracts.schema > packages/contracts/intake-v1.schema.json`. The [synthetic fixtures](evaluation/intake-v1.json) exercise intake acceptance in English, Urdu and Roman Urdu. Detector accuracy requires a separate labeled benchmark.
 
 See the [threat model](docs/THREAT_MODEL.md) and [privacy inventory](docs/PRIVACY_INVENTORY.md) for rollout gates.
 
 ## Next milestone
 
-Connect owner-scoped assessment creation to a transactional job outbox with idempotency and guest quotas. Add the queue service when its consumer lands. Follow the [TRD implementation sequence](docs/TRD.md#10-implementation-sequence).
+Implement the outbox dispatcher and first worker with retry-safe job claiming. Add the queue service alongside its consumer. Follow the [TRD implementation sequence](docs/TRD.md#10-implementation-sequence).
