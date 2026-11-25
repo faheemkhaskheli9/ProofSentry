@@ -1,6 +1,6 @@
 # Privacy inventory
 
-This scaffold processes synthetic examples locally during tests. The API exposes liveness and documentation. Proposed retention below follows the TRD and requires approval before collecting submissions. The product owner is responsible for confirming the legal controller, hosting region, subprocessors and deletion evidence before pilot intake.
+This scaffold processes synthetic examples locally during tests. The API also issues opaque guest cookies, stores their SHA-256 digests with random principal IDs and 24-hour expiries, and rejects expired credentials. Session issuance prunes expired rows in bounded batches. Proposed retention below follows the TRD and requires approval before collecting submissions. The product owner is responsible for confirming the legal controller, hosting region, subprocessors and deletion evidence before pilot intake.
 
 | Fields | Purpose / recipient | Proposed retention and deletion |
 |---|---|---|

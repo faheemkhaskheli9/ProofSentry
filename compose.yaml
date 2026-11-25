@@ -1,5 +1,33 @@
 services:
+  db:
+    image: postgres:16-bookworm
+    environment:
+      POSTGRES_DB: proofsentry
+      POSTGRES_USER: proofsentry
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "proofsentry", "-d", "proofsentry"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  migrate:
+    build: .
+    command: ["python", "-m", "services.db.migrate"]
+    environment: &database
+      DATABASE_URL: "postgresql://proofsentry@db/proofsentry"
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
   api:
+    environment:
+      <<: *database
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://127.0.0.1:8000}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
     build: .
     ports:
       - "127.0.0.1:8000:8000"
@@ -11,3 +39,5 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+volumes:
+  pgdata:

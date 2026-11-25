@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from services.api.sessions import router
+
 app = FastAPI(title="ProofSentry", version="0.1.0")
+
+
+app.include_router(router)
 
 
 class Health(BaseModel):
